@@ -1,0 +1,138 @@
+<div class="p-4 pt-10 rounded-3xl z-30 w-full relative h-full">
+  <h2 class="text-3xl font-bold mb-12 flex justify-between dark:text-white">
+    Wallet
+    
+    <div class="relative z-50" *ngIf="!waiting">
+      <div
+        class="h-9 p-2 px-4 rounded-xl shadow-md flex items-center justify-center text-sm cursor-pointer"
+        (click)="showCurrencyPicker = !showCurrencyPicker"
+      >
+        {{ demoService.currency.code }}
+      </div>
+      <div
+        class="absolute top-full right-0 shadow-md text-sm rounded-xl p-2"
+        *ngIf="showCurrencyPicker"
+      >
+        <ul class="p-0 m-0 list-none">
+          <li
+            class="px-3 py-2 hover:bg-blue-200 cursor-pointer rounded-xl"
+            *ngFor="let currency of demoService.currencies; let i = index"
+            (click)="demoService.setCurrency(i); showCurrencyPicker = false"
+          >
+            {{ currency.code }}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div
+      *ngIf="waiting"
+      class="w-9 h-9 p-2 bg-indigo-600 rounded-full flex items-center justify-center"
+    >
+      <div class="w-9 h-1 bg-white animate-spin rounded-lg"></div>
+    </div>
+  </h2>
+
+  <div class="px-10 py-6 shadow-md rounded-lg mb-6">
+    <h3 class="mb-3 text-sm text-slate-400">Balance</h3>
+    
+    <p
+      class="mb-3 text-3xl items-center flex font-bold text-center justify-center"
+      [ngClass]="{ 'text-slate-300': waiting, 'text-slate-500': !waiting }"
+    >
+      {{ this.demoService.balance | currency: demoService.currency.code }}
+    </p>
+
+    <p 
+    class="p-1 block mb-3  bg-slate-300 text-slate-600 text-xs  rounded-lg overflow-hidden text-ellipsis"
+    *ngIf="wallet$ | async as walletData">
+      {{walletData.address }}
+    </p>
+
+    <div
+      class="p-1 justify-center flex bg-green-300 text-green-600 text-xs items-center rounded-lg"
+    >
+      Bank connected
+    </div>
+  </div>
+
+  <label
+    for="allow-auto"
+    class="p-4 flex mb-6 text-sm cursor-pointer justify-between rounded-lg shadow-sm items-center hover:shadow-md"
+  >
+    Allow seamless transactions
+    <input
+      id="allow-auto"
+      type="checkbox"
+      class="w-6 h-6 rounded-sm"
+      [checked]="allowSeamless"
+      (change)="toggleSeamlessTransfer()"
+    />
+  </label>
+
+  <div
+    *ngIf="error$ | async as error"
+    class="p-3 bg-red-500 text-white rounded-xl"
+  >
+    {{ error }}
+  </div>
+
+  <button
+    *ngIf="!allowSeamless"
+    (click)="openTransferModal($event)"
+    class="px-8 py-4 justify-center w-full flex bg-blue-600 text-white uppercase hover:shadow-xl font-bold items-center rounded-xl mb-6 cursor-pointer"
+  >
+    Transfer
+  </button>
+
+  <button
+    *ngIf="showRestart"
+    (click)="restart($event)"
+    class="px-8 py-4 rounded-xl bg-rose-500 text-white uppercase font-bold hover:shadow-xl absolute bottom-0 right-0"
+  >
+    Restart
+  </button>
+
+  <!-- Modal -->
+  <div
+    class="top-0 left-0 w-full h-full absolute bg-white/50 z-20"
+    (click)="cancelTransfer()"
+    *ngIf="showTransfer"
+  ></div>
+  <div
+    class="absolute top-1/2 left-1/2 w-11/12 h-3/4 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg z-30 p-6 shadow-xl"
+    *ngIf="showTransfer"
+  >
+    <h3 class="text-3xl font-bold mt-4 mb-8">Transfer to your wallet</h3>
+    <div class="py-4">
+      <label class="mb-4 block font-medium"> Amount </label>
+
+      <div class="flex gap-2">
+        <div
+          class="h-10 aspect-square rounded-md bg-slate-200 flex items-center justify-center"
+        >
+          {{ demoService.currency.symbol }}
+        </div>
+        <input
+          type="number"
+          class="block w-full h-10 border-b-2 border-slate-300 outline-none"
+          [(ngModel)]="transferAmount"
+        />
+      </div>
+    </div>
+    <div class="py-4">
+      <button
+        (click)="transfer($event)"
+        class="px-8 py-4 justify-center w-full flex bg-blue-600 text-white uppercase hover:shadow-xl font-bold items-center rounded-xl mb-6 cursor-pointer"
+      >
+        Transfer
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="p-3 bg-red-500 text-white rounded-xl mb-4 animate-slidein z-50 absolute bottom-0"
+    *ngIf="transferError"
+  >
+    {{ transferError }}
+  </div>
+</div>

@@ -1,0 +1,96 @@
+<form class="block" *ngIf="application">
+ 
+  <div class="py-4">
+    <ui-input
+      [config]="{
+        id: 'clientid',
+        type: inputType.text,
+        disabled: true,
+        initValue: application.client_id,
+        label: 'Client id'
+      }"
+    ></ui-input>
+  </div>
+
+  <div class="py-4 flex gap-4   ">
+    <ui-input class="max-w-xs flex-1  " [config]="{
+      id: 'client_credentials',
+      type: inputType.checkbox,
+      initValue: application.use_credentials,
+      label: 'Use client credentials'
+    }"
+    (valueChange)="updateUseClientCredentials()"
+    >
+    
+    </ui-input>
+
+  </div>
+
+  
+
+  <div class="py-4 pr-20 relative">
+    <ui-input
+    *ngIf="application.use_credentials"
+      [config]="{
+        id: 'clientsecret',
+        type: showSecret ? inputType.text : inputType.password,
+        disabled: true,
+        initValue: application.client_secret,
+        label: 'Client secret'
+      }"
+    ></ui-input>
+    <button
+      class="absolute right-0 bottom-8 px-4 py-3 border-2 border-slate-300 outline-none rounded-xl bg-white"
+      (click)="toggleSecret($event)"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+        />
+      </svg>
+    </button>
+  </div>
+
+  
+</form>
+
+<footer class="flex flex-row-reverse mt-20">
+  <ui-button [theme]="buttonTheme.error" (action)="deleteApplication()">
+    Delete application
+  </ui-button>
+</footer>
+
+<ng-container *ngIf="showConfirmRemoval">
+  <div
+    class="w-screen h-screen fixed top-0 left-0 bg-white/75 dark:bg-black/75 z-50"
+    (click)="cancelRemoval()"
+  ></div>
+
+  <div
+    class="p-16 rounded-3xl shadow-2xl fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-700 z-50 w-2/5"
+  >
+    <h2 class="text-5xl font-bold mb-12 dark:text-white">Delete application</h2>
+
+    <p class="text-lg dark:text-slate-300">
+      Beware. When you confirm this. This application will be removed
+      completely. We don't store any backups.
+    </p>
+
+    <form>
+      <footer class="flex flex-row-reverse mt-8">
+        <ui-button [theme]="buttonTheme.secondary" (action)="confirmRemoval()">
+          Confirm
+        </ui-button>
+      </footer>
+    </form>
+  </div>
+</ng-container>

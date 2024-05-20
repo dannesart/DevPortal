@@ -1,0 +1,62 @@
+<div class="grid md:grid-cols-8 py-4 md:gap-0 gap-12">
+  <nav class="col-span-2 sticky self-baseline top-28">
+    <h4 class="font-medium mb-4 dark:text-slate-500">Content</h4>
+    <ul>
+      <li *ngFor="let segment of guide.segments">
+        <a
+          (click)="scrollToSegment(segment)"
+          *ngIf="!segment.hideInNav"
+          class="py-2 block hover:text-lime-500 dark:hover:text-lime-500 hover:cursor-pointer"
+          [ngClass]="{
+            'text-lime-500': (ui.sectionInView | async) == segment.headline,
+            'dark:text-slate-400':
+              (ui.sectionInView | async) != segment.headline
+          }"
+          >{{ segment.headline }}</a
+        >
+      </li>
+    </ul>
+  </nav>
+
+  <div class="col-span-6">
+    <section
+      *ngFor="let segment of guide.segments; last as isLast"
+      [ngClass]="{ 'mb-32': !isLast }"
+      class="flex flex-col"
+    >
+      <h3
+        appSectionInFocus
+        class="font-bold text-2xl mb-8 scroll-mt-20 dark:text-slate-300"
+        *ngIf="segment.headline"
+        [id]="segment.headline"
+      >
+        {{ segment.headline }}
+      </h3>
+      <div class="w-9/12 flex flex-col my-4">
+        <img
+          [src]="'assets/' + segment.image"
+          *ngIf="segment.image"
+          class="max-h-48 self-center max-w-full"
+        />
+      </div>
+
+      <p class="w-9/12 mb-8 dark:text-slate-300" *ngIf="segment.text">
+        {{ segment.text }}
+      </p>
+
+      <ng-container *ngFor="let component of segment.components">
+        <app-code
+          *ngIf="component.type == componentTypes.code"
+          class="my-6 block w-3/4"
+          [config]="component.config"
+        ></app-code>
+        <app-emulator
+          *ngIf="component.type == componentTypes.emulator"
+          class="my-6 block relative z-10"
+          [config]="component.config"
+        ></app-emulator>
+      </ng-container>
+
+    </section>
+  </div>
+</div>

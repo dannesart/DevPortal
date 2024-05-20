@@ -1,0 +1,94 @@
+<section class="p-10 relative" >
+  <h1 class="text-5xl font-bold mb-12 dark:text-white">Preferences</h1>
+
+  <h2 class="text-2xl font-bold mb-8 dark:text-slate-300">Basic</h2>
+  <div
+    class="rounded-xl shadow-lg p-10 py-8 mb-10 relative dark:bg-slate-700 flex flex-col gap-8"
+    *ngIf="getUser$() | async as user; else noUser"
+  >
+    <div>
+      <label class="mb-4 block font-medium dark:text-slate-300">Name</label>
+      <p class="dark:text-white text-xl">
+        {{ user.name }} {{ user.nickname ? "a.k.a. " + user.nickname : "" }}
+      </p>
+    </div>
+    <div>
+      <label class="mb-4 block font-medium dark:text-slate-300">Email</label>
+      <div class="dark:text-white text-xl flex flex-row gap-3 items-center">
+        <div *ngIf="user.email_verified">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 stroke-cyan-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+            />
+          </svg>
+        </div>
+        {{ user.email }}
+      </div>
+    </div>
+    <div *ngIf="getProvider(user.sub) as provider">
+      <label class="mb-4 block font-medium dark:text-slate-300">Provider</label>
+      <div class="dark:text-white text-xl flex flex-row gap-3 items-center">
+        <div class="h-6 w-6 bg-slate-300 p-1 rounded-md">
+          <img *ngIf="provider.logo" [src]="provider.logo" width="100%" />
+        </div>
+        {{ provider.name }}
+      </div>
+    </div>
+    <div>
+      <label class="mb-4 block font-medium dark:text-slate-300">Phone</label>
+      <div class="flex flex-row items-center gap-8">
+        <div class="dark:text-white text-xl flex flex-col gap-2">
+          Connect your phone
+          <small class="block text-xs text-slate-500 dark:text-slate-300">
+            You can connect your developer user with your peyya user.
+          </small>
+        </div>
+        <button
+          class="px-8 py-4 rounded-xl bg-blue-500 text-white uppercase font-bold hover:shadow-xl"
+        >
+          Connect
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noUser>
+    <div class="rounded-xl shadow-lg p-10 py-8 mb-10 relative dark:bg-slate-700 flex flex-col gap-8">
+      <p>No user could be fetched. Please reload or log out and log in again.</p>
+    </div>
+  </ng-template>
+
+  <ng-container *ngIf="developer$ | async as developer">
+
+
+    <ui-preference-role [role]="developer.role" (valueChange)="updateRole($event)"></ui-preference-role>
+
+    <ui-preference-avatar [avatar]="developer.avatar" (valueChange)="updateAvatar($event)"></ui-preference-avatar>
+   
+  </ng-container>
+  
+
+  <footer class="flex flex-row-reverse mt-20 gap-4">
+    
+    <button
+      class="px-8 py-4 rounded-xl bg-rose-500 text-white uppercase font-bold hover:shadow-xl"
+    >
+      Delete me
+    </button>
+    <button
+        (click)="logOut()"
+        class="px-8 py-4 rounded-xl bg-red-400 text-white uppercase font-bold hover:shadow-xl"
+      >
+        Log me out, please
+      </button>
+  </footer>
+</section>

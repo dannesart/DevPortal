@@ -1,0 +1,31 @@
+<div class="logo px-10 py-5 relative cursor-pointer" (click)="goHome()">
+  <!--img [src]="'/assets/logo.svg'" /-->
+  <img [src]="'/assets/6331b9aec21f6f492b99eb39_Peyya logotype Black.webp'" class="w-36"/>
+  <p class="absolute -bottom-2 left-20 text-slate-400 dark:text-slate-300">
+    Portal
+  </p>
+</div>
+
+<div class="md:px-10 md:pt-5 md:mt-4 pt-2 px-10">
+  <nav class="md:flex-col flex-row flex gap-4 ">
+    <a
+      *ngFor="let route of routes"
+      [routerLink]="route.path"
+      [routerLinkActive]="'font-bold'"
+      class="md:px-4 px-2 py-4 md:text-lg text-sm block rounded-md hover:bg-slate-100 hover:text-slate-500 dark:text-slate-300 dark:hover:bg-slate-600"
+      [ngClass]="{ hidden: !route.show }"
+      >{{ route.label }}</a
+    >
+    <a
+      [href]="'https://discord.gg/pxC6rcvfE7'"
+      target="_blank"
+      class="md:px-4 px-2 py-4 block md:text-lg text-sm rounded-md hover:bg-slate-100 hover:text-slate-500 dark:text-slate-300 dark:hover:bg-slate-600 "
+    >
+      Discord
+    </a>
+  </nav>
+</div>
+
+<small class="md:absolute fixed bottom-9 left-9 text-slate-300 dark:text-slate-600">
+  Peyya v.0.1.0
+</small>

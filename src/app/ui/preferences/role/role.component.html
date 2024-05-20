@@ -1,0 +1,13 @@
+<h2 class="text-2xl font-bold mb-8 dark:text-slate-300">Role</h2>
+<div class="rounded-xl shadow-lg p-10 py-8 mb-10 relative dark:bg-slate-700 flex flex-col gap-6">
+  <div>
+    <label class="mb-4 block font-medium dark:text-slate-300">Role</label>
+  
+    <ui-input [config]="{
+      type: inputType.select,
+      initValue: role || roles[0].name,
+      options: rolesOptions
+    }" (valueChange)="updateRole($event)"></ui-input>
+
+  </div>
+</div>

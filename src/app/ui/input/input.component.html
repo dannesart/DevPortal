@@ -1,0 +1,179 @@
+<div
+  *ngIf="config && !config.hidden"
+  class="dark:text-slate-300"
+  [ngClass]="{
+    'mb-4': !config.isLast,
+    'flex flex-row items-center justify-between':
+      config.type == inputType.checkbox
+  }"
+>
+  <label
+    class="mb-2 block font-medium text-slate-600"
+    *ngIf="config.label"
+    [for]="config.id || ''"
+    >{{ config.label }}</label
+  >
+
+  <ng-container [ngSwitch]="config.type">
+    <ng-container *ngSwitchCase="inputType.text">
+      <input
+        type="text"
+        (input)="handleChange($event)"
+        [id]="config.id"
+        [name]="config.name"
+        [value]="value"
+        [disabled]="config.disabled"
+        [placeholder]="config.placeholder"
+        class="block w-full px-4 py-3 border-t-2 mt-4 rounded-md shadow-inner border-slate-300 outline-none bg-slate-100 dark:bg-slate-900 caret-fuchsia-500"
+      />
+    </ng-container>
+
+    <ng-container *ngSwitchCase="inputType.password">
+      <input
+        type="password"
+        (input)="handleChange($event)"
+        [id]="config.id"
+        [name]="config.name"
+        [value]="value"
+        [disabled]="config.disabled"
+        [placeholder]="config.placeholder"
+        class="block w-full px-4 py-3 border-t-2 mt-4 rounded-md shadow-inner border-slate-300 outline-none bg-slate-100 dark:bg-slate-900 caret-fuchsia-500"
+      />
+    </ng-container>
+
+    <ng-container *ngSwitchCase="inputType.phone">
+      <input
+        type="tel"
+        (input)="handleChange($event)"
+        [id]="config.id"
+        [value]="value"
+        [name]="config.name"
+        [disabled]="config.disabled"
+        [placeholder]="config.placeholder"
+        class="block w-full px-4 py-3 border-t-2 mt-4 rounded-md shadow-inner border-slate-300 outline-none bg-slate-100 dark:bg-slate-900 caret-fuchsia-500"
+      />
+    </ng-container>
+
+    <ng-container *ngSwitchCase="inputType.numberValidation">
+      <div class="flex gap-1">
+        <input
+          type="tel"
+          #code1
+          pattern="\d*"
+          (input)="handleCode($event, 1)"
+          [name]="config.name"
+          [disabled]="config.disabled"
+          [placeholder]="config.placeholder"
+          autocomplete="off"
+          maxlength="1"
+          class="block w-full px-0 text-center py-3 border-t-2 mt-4 rounded-md shadow-inner border-slate-300 outline-none bg-slate-100 dark:bg-slate-900"
+        />
+        <input
+          type="tel"
+          #code2
+          pattern="\d*"
+          (input)="handleCode($event, 2)"
+          [name]="config.name"
+          [disabled]="config.disabled"
+          [placeholder]="config.placeholder"
+          autocomplete="off"
+          maxlength="1"
+          class="block w-full px-0 text-center py-3 border-t-2 mt-4 rounded-md shadow-inner border-slate-300 outline-none bg-slate-100 dark:bg-slate-900"
+        />
+        <input
+          type="tel"
+          #code3
+          pattern="\d*"
+          (input)="handleCode($event, 3)"
+          [name]="config.name"
+          [disabled]="config.disabled"
+          [placeholder]="config.placeholder"
+          autocomplete="off"
+          maxlength="1"
+          class="block w-full px-0 text-center py-3 border-t-2 mt-4 rounded-md shadow-inner border-slate-300 outline-none bg-slate-100 dark:bg-slate-900"
+        />
+        <input
+          type="tel"
+          #code4
+          pattern="\d*"
+          (input)="handleCode($event, 4)"
+          [name]="config.name"
+          [disabled]="config.disabled"
+          [placeholder]="config.placeholder"
+          autocomplete="off"
+          maxlength="1"
+          class="block w-full px-0 text-center py-3 border-t-2 mt-4 rounded-md shadow-inner border-slate-300 outline-none bg-slate-100 dark:bg-slate-900"
+        />
+        <input
+          type="tel"
+          #code5
+          pattern="\d*"
+          (input)="handleCode($event, 5)"
+          [name]="config.name"
+          [disabled]="config.disabled"
+          [placeholder]="config.placeholder"
+          autocomplete="off"
+          maxlength="1"
+          class="block w-full px-0 text-center py-3 border-t-2 mt-4 rounded-md shadow-inner border-slate-300 outline-none bg-slate-100 dark:bg-slate-900"
+        />
+        <input
+          type="tel"
+          #code6
+          pattern="\d*"
+          (input)="handleCode($event, 6)"
+          [name]="config.name"
+          [disabled]="config.disabled"
+          [placeholder]="config.placeholder"
+          autocomplete="off"
+          maxlength="1"
+          class="block w-full px-0 text-center py-3 border-t-2 mt-4 rounded-md shadow-inner border-slate-300 outline-none bg-slate-100 dark:bg-slate-900"
+        />
+      </div>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="inputType.select">
+
+      <select
+        class="block w-full px-4 py-3 rounded-md shadow-md outline-none dark:bg-slate-800 cursor-pointer hover:shadow-lg caret-fuchsia-500"
+        (input)="handleChange($event)"
+        [value]="value"
+        [disabled]="config.disabled"
+      >
+        <option *ngFor="let option of config.options" [selected]="option.value === value" [value]="option.value">
+          {{ option.text }}
+        </option>
+      </select>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="inputType.country">
+      <select
+        class="block w-full px-4 py-3 rounded-md shadow-md outline-none dark:bg-slate-800 cursor-pointer hover:shadow-lg"
+        (change)="handleChange($event)"
+        [(ngModel)]="value"
+        [disabled]="config.disabled || false"
+      >
+        <option selected disabled [ngValue]="''">
+          Select recipient country
+        </option>
+        <option
+          *ngFor="let country of config.options || (countries | keyvalue)"
+          [value]="country.value || country"
+        >
+          {{ country.key || country }}
+        </option>
+      </select>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="inputType.checkbox">
+      <input
+        type="checkbox"
+        [name]="config.name || ''"
+        [id]="config.id || ''"
+        class="mb-2 w-5 h-5 rounded-md shadow-inner border-slate-300 outline-none bg-slate-100 dark:bg-slate-900"
+        [(ngModel)]="value"
+        (change)="handleChange($event)"
+        [disabled]="config.disabled || false"
+      />
+    </ng-container>
+  </ng-container>
+</div>

@@ -1,0 +1,71 @@
+<div class="p-4 pt-10 rounded-3xl bg-white z-30 w-full relative h-full">
+  <h2 class="text-3xl font-bold mb-12 flex justify-between">
+    Connect bank
+    <div
+      *ngIf="waiting"
+      class="w-9 h-9 p-2 bg-indigo-600 rounded-full flex items-center justify-center"
+    >
+      <div class="w-9 h-1 bg-white animate-spin rounded-lg"></div>
+    </div>
+  </h2>
+
+  <h3 class="text-lg font-bold mb-8 text-slate-500">Pick your country</h3>
+  <ng-container *ngIf="countries$ | async as countries">
+    <ui-input
+      [config]="{
+        type: inputType.country,
+        initValue: countries[0].value,
+        options: countries
+      }"
+      (valueChange)="updateCountry($event)"
+    ></ui-input>
+  </ng-container>
+
+  <div *ngIf="banks$ | async as banks">
+    <h3 class="text-lg font-bold mb-8 text-slate-500">Pick your bank</h3>
+    <div
+      class="px-4 py-2 rounded-md shadow-md mb-2 flex flex-row gap-8 cursor-pointer hover:shadow-lg items-center"
+      *ngFor="let bank of banks"
+      (click)="initConsent(bank.bicFi)"
+    >
+      <div class="w-7 h-7 rounded-full flex items-center">
+        <img [src]="bank.logoUrl" class="object-cover" />
+      </div>
+      <p class="text-sm">
+        {{ bank.name }}
+      </p>
+    </div>
+  </div>
+
+  <div *ngIf="authOptions$ | async as auths">
+    <ng-container *ngIf="auths.consent as consent">
+      <h3 class="text-lg font-bold mb-8 text-slate-500">
+        Pick your authentication method
+      </h3>
+      <div
+        class="px-4 py-2 rounded-md shadow-md mb-2 flex flex-row gap-8 cursor-pointer hover:shadow-lg items-center"
+        *ngFor="let method of consent.scaMethods"
+        (click)="initAuthConsent(method)"
+      >
+        <p class="text-md">
+          {{ method.name }}
+        </p>
+      </div>
+    </ng-container>
+  </div>
+
+  <div
+    *ngIf="error$ | async as error"
+    class="p-3 bg-red-500 text-white rounded-xl"
+  >
+    {{ error }}
+  </div>
+
+  <button
+    *ngIf="showRestart"
+    (click)="restart($event)"
+    class="px-8 py-4 rounded-xl bg-rose-500 text-white uppercase font-bold hover:shadow-xl absolute bottom-0 right-0"
+  >
+    Restart
+  </button>
+</div>

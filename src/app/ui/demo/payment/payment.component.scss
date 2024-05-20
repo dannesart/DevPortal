@@ -1,0 +1,25 @@
+svg {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  pointer-events: none;
+  animation: firstAnimation 6s linear forwards;
+
+  .svg-check {
+    transform: scale(0, 0);
+    transform-origin: center;
+    animation: appear 0.1s linear forwards;
+    animation-delay: 0.5s;
+  }
+}
+
+@keyframes firstAnimation {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes appear {
+  to {
+    transform: scale(1, 1);
+  }
+}

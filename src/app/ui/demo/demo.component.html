@@ -1,0 +1,69 @@
+<p
+  class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse font-medium"
+  *ngIf="!running || running == ''"
+>
+  {{ initializing ? "Initializing" : "Loading demo ... " }}
+</p>
+
+<div
+  class="w-full h-full absolute top-0 left-0 z-40 bg-red-400/70 flex items-center justify-center text-white text-2xl"
+  *ngIf="!isAuth && demo.authRequired"
+>
+  You need to be signed in.
+</div>
+
+<!-- container -->
+<div
+  class="overflow-hidden h-full block"
+  *ngIf="running && running != ''"
+  [ngClass]="{ 'blur-sm': !isAuth && demo.authRequired }"
+>
+  <app-auth
+    class="h-full block"
+    *ngIf="running == demos.auth"
+    [config]="config"
+    (consoleEvent)="handleConsoleEvents($event)"
+  ></app-auth>
+
+  <app-create-account
+    class="h-full block"
+    *ngIf="running == demos.createUser"
+    [config]="config"
+    (consoleEvent)="handleConsoleEvents($event)"
+  ></app-create-account>
+
+  <demo-kyc class="h-full block"
+  *ngIf="running == demos.kyc"
+  [config]="config"
+  (consoleEvent)="handleConsoleEvents($event)">
+
+  </demo-kyc>
+
+  <app-banks
+    class="h-full block"
+    *ngIf="running == demos.banks"
+    [config]="config"
+    (consoleEvent)="handleConsoleEvents($event)"
+  ></app-banks>
+
+  <app-wallet
+    class="h-full block"
+    *ngIf="running == demos.wallet"
+    [config]="config"
+    (consoleEvent)="handleConsoleEvents($event)"
+  ></app-wallet>
+
+  <app-payment
+    class="h-full block"
+    *ngIf="running == demos.payment"
+    [config]="config"
+    (consoleEvent)="handleConsoleEvents($event)"
+  ></app-payment>
+
+  <demo-sendmoney
+    class="h-full block"
+    *ngIf="running == demos.sendmoney"
+    [config]="config"
+    (consoleEvent)="handleConsoleEvents($event)"
+  ></demo-sendmoney>
+</div>

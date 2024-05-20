@@ -1,0 +1,128 @@
+<section class="p-10">
+  <h1 class="text-5xl font-bold mb-12 dark:text-white">My applications</h1>
+
+  <div
+    *ngIf="applicationService.isGettingApplications$ | async"
+    class="p-10 flex place-content-center"
+  >
+    <div
+      class="w-24 h-24 p-5 bg-indigo-600 rounded-full flex items-center justify-center"
+    >
+      <div class="w-24 h-2 bg-white animate-spin rounded-lg"></div>
+    </div>
+  </div>
+
+  <div
+    class="rounded-xl shadow-lg p-10 py-8 mb-10 relative dark:bg-slate-700 flex flex-row gap-6 items-center"
+    *ngIf="applicationService.gettingApplicationsError$ | async"
+  >
+    <p class="text-xl dark:text-white">
+      Sorry. We couldn´t get your applications. Please reload or contact us.
+    </p>
+
+    <button
+      (click)="applicationService.getApplications()"
+      class="px-8 py-4 rounded-xl bg-lime-500 text-white uppercase font-bold ml-10 hover:shadow-xl"
+    >
+      Try again
+    </button>
+  </div>
+
+  <ul *ngIf="applicationService.applicationsBehavior$ | async as applications">
+    <li
+      class="rounded-xl shadow-lg p-10 py-8 mb-10 relative hover:shadow-xl hover:cursor-pointer dark:bg-slate-700"
+      *ngFor="let application of applications"
+      (click)="goToApplication(application)"
+    >
+      <h2 class="text-xl font-bold mb-4 capitalize dark:text-slate-300">
+        {{ application.name }}
+      </h2>
+      <h3 class="text-slate-400">
+        {{ application.id }}
+      </h3>
+
+      <p
+        class="absolute top-10 right-10 text-lg"
+        [ngClass]="{
+          'text-orange-400': application.sandbox,
+          'text-green-500': !application.sandbox
+        }"
+      >
+        {{ application.sandbox ? "Sandbox" : "Production" }}
+      </p>
+    </li>
+    <li
+      *ngIf="!applications.length"
+      class="rounded-xl shadow-lg p-10 py-8 mb-10 relative dark:bg-slate-700"
+    >
+      <h2 class="text-xl font-bold mb-4 dark:text-slate-300">
+        No applications yet.
+      </h2>
+      <h3 class="text-slate-400">
+        Go ahead and create one. So you can start using our api.
+      </h3>
+    </li>
+  </ul>
+
+  <footer class="flex flex-row-reverse mt-20">
+    <button
+      (click)="createNewApplication()"
+      class="px-8 py-4 rounded-xl bg-purple-500 text-white uppercase font-bold hover:shadow-xl"
+    >
+      New app
+    </button>
+  </footer>
+</section>
+
+<ng-container *ngIf="applicationService.isCreatingNewApplication$ | async">
+  <div
+    class="w-screen h-screen fixed top-0 left-0 bg-white/75 dark:bg-black/75 z-20"
+    (click)="cancelNewApplication()"
+  ></div>
+
+  <div
+    class="p-16 rounded-3xl shadow-2xl fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-700 z-30 w-2/5"
+  >
+    <h2 class="text-5xl font-bold mb-12 dark:text-slate-300">New app</h2>
+
+    <p class="text-lg dark:text-slate-300">
+      Create your new application by giving it a sweet name, worthy beiing sung
+      in the great halls.
+    </p>
+
+    <form *ngIf="newApplication">
+      <div class="py-4">
+        <!-- <label class="mb-4 block font-medium dark:text-slate-300"
+          >Name of the application</label
+        >
+        <input
+          type="text"
+          name="application-name"
+          placeholder="Name"
+          class="block w-full px-4 py-3 border-b-2 border-slate-300 outline-none dark:bg-slate-700 dark:text-slate-300"
+          [(ngModel)]="newApplication.name"
+        /> -->
+        <ui-input
+          [config]="{
+            id: 'applicationName',
+            type: inputType.text,
+            name: 'applicationName',
+            placeholder: 'Name of the application',
+            initValue: newApplication.name,
+            label: 'Name'
+          }"
+          (valueChange)="handleInputChange($event, 'applicationName')"
+        ></ui-input>
+      </div>
+      <footer class="flex flex-row-reverse mt-8">
+        <button
+          (click)="createApplication()"
+          type="button"
+          class="px-8 py-4 rounded-xl bg-green-500 text-white uppercase font-bold hover:shadow-xl"
+        >
+          New app
+        </button>
+      </footer>
+    </form>
+  </div>
+</ng-container>

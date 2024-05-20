@@ -1,0 +1,73 @@
+<ng-container *ngIf="getUser$() | async as user">
+  <!-- Main header-->
+  <div class="pt-5 px-10 flex flex-row-reverse justify-between bg-w">
+    <div
+      id="user"
+      class="flex flex-row cursor-pointer z-50"
+      (click)="toggleUserNav()"
+    >
+    <ng-container *ngIf="devService.developer$() | async as developer">
+      <div id="user-info" class="text-right mr-4">
+        <div id="user-info-role" class="text-base text-slate-400">
+          {{ developer.role || "Developer"}}
+        </div>
+        <div
+          id="user-info-name"
+          class="font-medium text-lg dark:text-slate-300"
+        >
+          @{{ user.nickname }}
+        </div>
+      </div>
+      <div id="user-image">
+        
+          <img
+            [src]="developer.avatar || 'https://d1lss44hh2trtw.cloudfront.net/resize?type=webp&url=https%3A%2F%2Fshacknews-www.s3.amazonaws.com%2Fassets%2Farticle%2F2022%2F01%2F26%2Fbayc-racism_feature.jpg&width=1032&sign=f4LcTNAnRNHFwIXtO9O9WaQU78Ny6X5mT-ArULv2gp4'"
+            class="w-14 h-14 rounded-full border-4 border-slate-300 object-cover"
+          />
+      </div>
+    </ng-container>
+    </div>
+    <div id="back" *ngIf="canGoBack()">
+      <button
+        class="px-6 py-2 rounded-xl bg-red-100 text-black uppercase font-bold hover:shadow-xl"
+        (click)="goBack()"
+      >
+        Back
+      </button>
+    </div>
+  </div>
+  <!-- Close aside area-->
+  <div
+    class="fixed h-screen w-screen z-30 right-0 top-0"
+    (click)="toggleUserNav()"
+    *ngIf="showUserNav"
+  ></div>
+  <!-- aside -->
+  <div
+    class="fixed h-screen md:w-1/4 w-3/4 flex flex-col justify-between right-0 top-0 z-40 p-20 bg-white shadow-2xl transition-transform dark:bg-slate-700"
+    [ngClass]="{ 'translate-x-full': !showUserNav }"
+  >
+    <div>
+      <h3 class="py-8 text-xl text-slate-400">Hello there!</h3>
+    </div>
+    <div>
+      <p class="py-8 pb-4 text-lg text-slate-400">Theme</p>
+
+      <button
+        class="px-8 py-4 rounded-xl w-full uppercase font-bold hover:shadow-xl bg-slate-600 text-white dark:bg-slate-100 dark:text-slate-600"
+        (click)="toggleTheme()"
+      >
+        Switch to {{ ui.getTheme() == theme.light ? "Dark" : "Light" }} mode
+      </button>
+
+      <div class="h-1 w-full border-b mb-6 mt-5 dark:border-slate-800"></div>
+
+      <button
+        (click)="logOut()"
+        class="px-8 py-4 rounded-xl bg-red-400 w-full text-white uppercase font-bold hover:shadow-xl"
+      >
+        Log me out, please
+      </button>
+    </div>
+  </div>
+</ng-container>

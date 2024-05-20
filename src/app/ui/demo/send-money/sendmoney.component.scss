@@ -1,0 +1,12 @@
+:host {
+  ::-webkit-scrollbar {
+    width: 3px;
+    opacity: 0.4;
+  }
+
+  &:hover {
+    ::-webkit-scrollbar {
+      opacity: 0.8;
+    }
+  }
+}
